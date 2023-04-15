@@ -1,0 +1,11 @@
++tạo một table mới dùng để lưu comment 
+mỗi comment gôm: 
+{
+	post:ID;
+	comments: []{
+		userName, avatar, comment
+	}
+}
+
+
+
