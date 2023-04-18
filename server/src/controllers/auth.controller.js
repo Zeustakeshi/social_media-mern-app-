@@ -32,8 +32,14 @@ export const register = async (req, res) => {
 
         await newRefeshToken.save();
 
-        res.cookie("access_token", access_token, { httpOnly: true });
-        res.cookie("refresh_token", refresh_token, { httpOnly: true });
+        res.cookie("access_token", access_token, {
+            httpOnly: true,
+            // maxAge: process.env.ACCESS_TOKEN_TIME * 1000,
+        });
+        res.cookie("refresh_token", refresh_token, {
+            httpOnly: true,
+            // maxAge: process.env.REFRESH_TOKEN_TIME * 1000,
+        });
         return res.status(200).json({
             id: user._id,
             userName: user.userName,
@@ -77,9 +83,11 @@ export const login = async (req, res) => {
 
         res.cookie("access_token", access_token, {
             httpOnly: true,
+            // maxAge: process.env.ACCESS_TOKEN_TIME * 1000,
         });
         res.cookie("refresh_token", refresh_token, {
             httpOnly: true,
+            // maxAge: process.env.REFRESH_TOKEN_TIME * 1000,
         });
         return res.status(200).json({
             id: user._id,

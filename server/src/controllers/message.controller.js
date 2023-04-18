@@ -49,6 +49,9 @@ export const getMessagesByChatId = async (req, res) => {
     } catch (error) {
         return res.status(500).json(error);
     }
+};
 
-    return res.json("ok");
+export const getTestMessages = async (req, res) => {
+    console.log(global._io);
+    res.json("ok");
 };

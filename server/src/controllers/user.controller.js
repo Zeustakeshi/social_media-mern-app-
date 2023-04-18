@@ -1,7 +1,6 @@
 import bcrypt from "bcrypt";
-import userModel from "../models/user.model.js";
-import jwt from "jsonwebtoken";
 import queryString from "query-string";
+import userModel from "../models/user.model.js";
 
 export const getUser = async (req, res) => {
     const profileID = req.params.id;

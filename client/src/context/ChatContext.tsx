@@ -1,5 +1,6 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Socket } from "socket.io-client";
 import useSocket from "../hooks/useSocket";
 import { IChats } from "../interfaces/chats.interface";
 import { IUser } from "../interfaces/user.interface";
@@ -13,6 +14,8 @@ interface ChatProviderProps {
 interface IChatContext {
     chats: IChats[];
     friends: string[] | any;
+    friendOlines: IUser[] | any;
+    socket?: Socket;
 }
 
 const ChatContext = React.createContext<IChatContext | null>(null);
@@ -20,8 +23,12 @@ const ChatContext = React.createContext<IChatContext | null>(null);
 const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     const [chats, setChats] = useState<IChats[]>([]);
     const [friends, setFriends] = useState<any>([]);
-    const socket = useSocket(BASE_URL);
+    const [friendOlines, setFriendOlines] = useState<any>([]);
     const auth = useAuth();
+    const socket = useSocket(BASE_URL, {
+        userID: auth?.currentUser?.id,
+    });
+
     useEffect(() => {
         // get chat from api
         (async () => {
@@ -33,13 +40,11 @@ const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
                 });
                 const chats: IChats[] = res.data;
                 setChats(chats);
-
                 const friends = await Promise.all(
                     chats.map(async (chat) => {
                         const friendID = chat.members?.filter(
                             (m) => m !== auth?.currentUser?.id
                         )[0];
-
                         try {
                             const res = await axios({
                                 method: "GET",
@@ -60,18 +65,54 @@ const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     }, []);
 
     useEffect(() => {
-        if (!socket) return;
-        socket.emit("newUser", auth?.currentUser?.id);
+        if (!socket || !friends.length || !chats.length) {
+            return;
+        }
 
-        const friendIDs = friends.map((friend: any) => friend.id);
-
-        socket.emit("friends-online", friendIDs);
-        socket.on("getFriendOnlines", (friends) => {
-            console.log(friends);
+        socket.on("connect_error", (err) => {
+            console.log(err);
         });
-    }, [socket, friends]);
+        socket.emit("newUser", auth?.currentUser?.id);
+        friends.forEach((friend: any) => {
+            // console.log("send to " + friend.userName);
 
-    const values = { chats, friends };
+            socket.emit("onlineFriend", friend.id);
+            socket.emit("notifyForFriendOnline", friend.id, {
+                userID: auth?.currentUser?.id,
+                isOnline: true,
+            });
+        });
+
+        socket.on("getOnlineFriend", (friendID) => {
+            const friendInfo = friends.find(
+                (friend: any) => friend.id === friendID
+            );
+            if (!friendInfo) return;
+            setFriendOlines((prev: any) => {
+                if (!prev.includes(friendInfo)) {
+                    return [...prev, friendInfo];
+                } else return prev;
+            });
+        });
+
+        socket.on("notifyFromFriend", (message) => {
+            const { userID: friendID, isOnline } = message;
+            const friendInfo = friends.find(
+                (friend: any) => friend.id === friendID
+            );
+            if (!friendInfo) return;
+            setFriendOlines((prev: any) => {
+                if (!prev.includes(friendInfo) && isOnline) {
+                    return [...prev, friendInfo];
+                } else return prev;
+            });
+        });
+
+        return () => {
+            socket.removeAllListeners();
+        };
+    }, [friends, socket]);
+    const values = { chats, friends, friendOlines, socket };
 
     return (
         <ChatContext.Provider value={values}>{children}</ChatContext.Provider>

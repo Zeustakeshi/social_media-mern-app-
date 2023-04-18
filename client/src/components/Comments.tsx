@@ -9,8 +9,6 @@ import Avatar from "./Avatar";
 
 const Comments: React.FC<ICommentsProps> = ({ commentData = [], postID }) => {
     const [comments, setComments] = useState<IComment[]>(commentData);
-    console.log(comments);
-
     const auth = useAuth();
 
     return (

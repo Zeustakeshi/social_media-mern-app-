@@ -1,14 +1,14 @@
+import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import MapsUgcRoundedIcon from "@mui/icons-material/MapsUgcRounded";
 import ModeEditRoundedIcon from "@mui/icons-material/ModeEditRounded";
 import PersonAddDisabledRoundedIcon from "@mui/icons-material/PersonAddDisabledRounded";
-import axios, { all } from "axios";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { useEffect, useId, useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Avatar from "../components/Avatar";
-import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import CreatePost from "../components/CreatePost";
 import Image from "../components/Image";
 import Posts from "../components/Posts";
@@ -233,22 +233,42 @@ const AddfriendButton: React.FC<AddfriendButtonProps> = ({
     const toggleAddfriend = async () => {
         if (!currentUserID || !profileID) return;
         if (addfriend) {
-            // folowing user
+            //unfolowing user
             const res = await axios({
                 method: "PATCH",
                 url: BASE_URL_API + `/user/${profileID}/unfollow`,
                 withCredentials: true,
             });
             alert(res.data);
+            // remove chat room
+            const res2 = await axios({
+                method: "DELETE",
+                url: BASE_URL_API + `/chats`,
+                data: {
+                    senderID: currentUserID,
+                    receiverID: profileID,
+                },
+                withCredentials: true,
+            });
             setAddFriend(false);
         } else {
-            // unfolowing user
+            // folowing user
             const res = await axios({
                 method: "PATCH",
                 url: BASE_URL_API + `/user/${profileID}/follow`,
                 withCredentials: true,
             });
             alert(res.data);
+            // create chat room
+            const res2 = await axios({
+                method: "POST",
+                url: BASE_URL_API + `/chats`,
+                data: {
+                    senderID: currentUserID,
+                    receiverID: profileID,
+                },
+                withCredentials: true,
+            });
             setAddFriend(true);
         }
     };
