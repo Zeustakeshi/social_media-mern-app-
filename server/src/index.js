@@ -31,6 +31,7 @@ global._io = io;
 app.use(cookieParser());
 app.use(helmet());
 app.use(cors({ credentials: true, origin: process.env.ORIGIN_URL }));
+console.log(process.env.ORIGIN_URL);
 app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/post", postRouter);
