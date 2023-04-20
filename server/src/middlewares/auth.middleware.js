@@ -41,11 +41,9 @@ export const authenticationMiddleware = (req, res, next) => {
                             // set client cookie
                             res.cookie("access_token", access_token, {
                                 httpOnly: true,
-                                // maxAge: process.env.ACCESS_TOKEN_TIME * 1000,
                             });
                             res.cookie("refresh_token", refresh_token, {
                                 httpOnly: true,
-                                // maxAge: process.env.REFRESH_TOKEN_TIME * 1000,
                             });
 
                             req.user = { userID: data._id };

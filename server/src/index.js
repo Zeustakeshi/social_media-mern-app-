@@ -31,8 +31,12 @@ global._io = io;
 app.use(cookieParser());
 app.use(helmet());
 app.use(cors({ credentials: true, origin: process.env.ORIGIN_URL }));
-console.log(process.env.ORIGIN_URL);
 app.use(express.json());
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", process.env.ORIGIN_URL);
+    res.header("Access-Control-Allow-Credentials", true);
+    next();
+});
 app.use("/api/auth", authRouter);
 app.use("/api/post", postRouter);
 app.use("/api/user", userRouter);
@@ -43,7 +47,7 @@ global._io.use(socketAuthMiddleware);
 const socketService = new SocketService();
 global._io.on("connection", socketService.connection.bind(socketService));
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 server.listen(PORT, () => {
     console.log("Server is runing is port " + PORT);
 });
