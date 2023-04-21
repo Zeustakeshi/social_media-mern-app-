@@ -40,9 +40,11 @@ export const authenticationMiddleware = (req, res, next) => {
                             });
                             // set client cookie
                             res.cookie("access_token", access_token, {
+                                sameSite: 'none',
                                 httpOnly: true,
                             });
                             res.cookie("refresh_token", refresh_token, {
+                                sameSite: 'none',
                                 httpOnly: true,
                             });
 
