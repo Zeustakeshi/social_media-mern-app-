@@ -41,6 +41,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 password,
             },
             withCredentials: true,
+            credentials: 'include',
         });
         setCurrentUser(res.data);
     };
@@ -54,6 +55,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 password,
             },
             withCredentials: true,
+            credentials: 'include',
         });
         setCurrentUser(res.data);
     };
