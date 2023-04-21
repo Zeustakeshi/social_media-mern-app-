@@ -41,9 +41,13 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 password,
             },
             withCredentials: true,
-            credentials: 'include',
         });
-        setCurrentUser(res.data);
+        document.cookie = `access_token=${res.data.access_token}`;
+        document.cookie = `refresh_token=${res.data.refresh_token}`;
+        const user = res.data;
+        delete user.access_token;
+        delete user.refresh_token;
+        setCurrentUser(user);
     };
 
     const login = async (userName: string, password: string) => {
@@ -55,9 +59,13 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 password,
             },
             withCredentials: true,
-            credentials: 'include',
         });
-        setCurrentUser(res.data);
+        document.cookie = `access_token=${res.data.access_token}`;
+        document.cookie = `refresh_token=${res.data.refresh_token}`;
+        const user = res.data;
+        delete user.access_token;
+        delete user.refresh_token;
+        setCurrentUser(user);
     };
 
     const logout = async () => {
@@ -66,6 +74,8 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             url: BASE_URL_API + "/auth/logout",
             withCredentials: true,
         });
+        document.cookie = "access_token=;";
+        document.cookie = "refresh_token=;";
         setCurrentUser({});
     };
 

@@ -32,16 +32,18 @@ export const register = async (req, res) => {
 
         await newRefeshToken.save();
 
-        res.cookie("access_token", access_token, {
-            sameSite: 'none',
-            httpOnly: true,
-        });
-        res.cookie("refresh_token", refresh_token, {
-            sameSite: 'none',
-            httpOnly: true,
-        });
+        // res.cookie("access_token", access_token, {
+        //     sameSite: 'none',
+        //     httpOnly: true,
+        // });
+        // res.cookie("refresh_token", refresh_token, {
+        //     sameSite: 'none',
+        //     httpOnly: true,
+        // });
         return res.status(200).json({
             id: user._id,
+            access_token: access_token,
+            refresh_token: refresh_token,
             userName: user.userName,
             coverImage: user.coverImage,
             email: user.email,
@@ -81,17 +83,19 @@ export const login = async (req, res) => {
             refeshToken: refresh_token,
         });
 
-        res.cookie("access_token", access_token, {
-            sameSite: 'none',
-            httpOnly: true,
-        });
-        res.cookie("refresh_token", refresh_token, {
-            sameSite: 'none',
-            httpOnly: true,
-        });
+        // res.cookie("access_token", access_token, {
+        //     sameSite: "none",
+        //     httpOnly: true,
+        // });
+        // res.cookie("refresh_token", refresh_token, {
+        //     sameSite: "none",
+        //     httpOnly: true,
+        // });
 
         return res.status(200).json({
             id: user._id,
+            access_token: access_token,
+            refresh_token: refresh_token,
             userName: user.userName,
             coverImage: user.coverImage,
             email: user.email,
