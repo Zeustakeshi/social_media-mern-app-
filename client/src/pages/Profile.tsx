@@ -5,7 +5,7 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import MapsUgcRoundedIcon from "@mui/icons-material/MapsUgcRounded";
 import ModeEditRoundedIcon from "@mui/icons-material/ModeEditRounded";
 import PersonAddDisabledRoundedIcon from "@mui/icons-material/PersonAddDisabledRounded";
-import axios from "axios";
+import api from "../utils/api";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Avatar from "../components/Avatar";
@@ -35,7 +35,7 @@ const Profile = () => {
         (async () => {
             if (!profileID) return;
             try {
-                const profile = await axios({
+                const profile = await api({
                     method: "GET",
                     url: BASE_URL_API + `/user/${profileID}`,
                     withCredentials: true,
@@ -56,7 +56,7 @@ const Profile = () => {
         const imgURL = prompt("Enter Avatar URL");
         if (!imgURL?.trim()) return;
         try {
-            const res = await axios({
+            const res = await api({
                 method: "PATCH",
                 url: BASE_URL_API + `/user/${auth?.currentUser?.id}`,
                 data: {
@@ -154,7 +154,7 @@ const UserName: React.FC<UserNameProps> = ({
             return null;
         }
         try {
-            const res = await axios({
+            const res = await api({
                 method: "PATCH",
                 url: BASE_URL_API + `/user/${userID}`,
                 data: {
@@ -234,14 +234,14 @@ const AddfriendButton: React.FC<AddfriendButtonProps> = ({
         if (!currentUserID || !profileID) return;
         if (addfriend) {
             //unfolowing user
-            const res = await axios({
+            const res = await api({
                 method: "PATCH",
                 url: BASE_URL_API + `/user/${profileID}/unfollow`,
                 withCredentials: true,
             });
             alert(res.data);
             // remove chat room
-            const res2 = await axios({
+            const res2 = await api({
                 method: "DELETE",
                 url: BASE_URL_API + `/chats`,
                 data: {
@@ -253,14 +253,14 @@ const AddfriendButton: React.FC<AddfriendButtonProps> = ({
             setAddFriend(false);
         } else {
             // folowing user
-            const res = await axios({
+            const res = await api({
                 method: "PATCH",
                 url: BASE_URL_API + `/user/${profileID}/follow`,
                 withCredentials: true,
             });
             alert(res.data);
             // create chat room
-            const res2 = await axios({
+            const res2 = await api({
                 method: "POST",
                 url: BASE_URL_API + `/chats`,
                 data: {
