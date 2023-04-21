@@ -1,5 +1,6 @@
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import axios from "axios";
+import api from "../utils/api";
 import moment from "moment";
 import React, { useState } from "react";
 import { useAuth } from "../context/authContext";
@@ -41,7 +42,7 @@ const InputComment: React.FC<InputCommentProps> = ({ setComments, postID }) => {
         e.preventDefault();
         if (!comment.trim()) return;
         try {
-            const res = await axios({
+            const res = await api({
                 method: "POST",
                 url: BASE_URL_API + `/post/${postID}/comment`,
                 data: { comment: comment },

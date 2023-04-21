@@ -1,6 +1,6 @@
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import ThumbUpRoundedIcon from "@mui/icons-material/ThumbUpRounded";
-import axios from "axios";
+import api from "../../utils/api";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
@@ -33,7 +33,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ setMessages, currentUser }) => {
         if (!message.trim() || !chat?.socket) return;
 
         try {
-            await axios({
+            await api({
                 method: "POST",
                 url: BASE_URL_API + `/messages`,
                 data: {

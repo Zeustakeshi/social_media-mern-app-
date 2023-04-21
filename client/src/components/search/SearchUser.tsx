@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../../utils/api";
 import React, { useEffect, useState } from "react";
 import useDebounce from "../../hooks/useDebounce";
 import { BASE_URL_API } from "../../utils/contst";
@@ -36,7 +36,7 @@ const SearchUser: React.FC<ISearchProps> = ({ searchURL }) => {
     const handleSearch = async (value: string) => {
         const encodedSearchTerm = encodeURIComponent(value);
         try {
-            const res = await axios({
+            const res = await api({
                 method: "GET",
                 url: searchURL + "/?q=" + encodedSearchTerm,
                 withCredentials: true,

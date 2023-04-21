@@ -6,12 +6,12 @@ import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
 import ShareIcon from "@mui/icons-material/Share";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Tippy from "@tippyjs/react/headless";
-import axios from "axios";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/authContext";
 import { IPost } from "../interfaces/post.interface";
 import { IUser } from "../interfaces/user.interface";
+import api from "../utils/api";
 import { BASE_URL_API } from "../utils/contst";
 import Avatar from "./Avatar";
 import Comments from "./Comments";
@@ -25,7 +25,7 @@ const Posts = ({ userID }: { userID?: string }) => {
 
         (async () => {
             try {
-                const postsRes = await axios({
+                const postsRes = await api({
                     method: "GET",
                     url: BASE_URL_API + `/post/${userID}`,
                     withCredentials: true,
@@ -33,7 +33,7 @@ const Posts = ({ userID }: { userID?: string }) => {
 
                 const posts = await Promise.all(
                     postsRes.data.map(async (post: IPost) => {
-                        const comments = await axios({
+                        const comments = await api({
                             method: "GET",
                             url: BASE_URL_API + `/post/${post._id}/comment`,
                             withCredentials: true,
@@ -79,7 +79,7 @@ const Post: React.FC<IPost> = ({
         (async () => {
             if (!userID) return;
             try {
-                const authorInfo = await axios({
+                const authorInfo = await api({
                     method: "GET",
                     url: BASE_URL_API + `/user/${userID}`,
                     withCredentials: true,
@@ -99,7 +99,7 @@ const Post: React.FC<IPost> = ({
         }
 
         try {
-            const res = await axios({
+            const res = await api({
                 method: "DELETE",
                 url: BASE_URL_API + `/post/${_id}`,
                 withCredentials: true,
@@ -204,7 +204,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ likes, postID }) => {
     const handleLike = async () => {
         if (liked) return;
         try {
-            const res = await axios({
+            const res = await api({
                 method: "PATCH",
                 url: BASE_URL_API + `/post/${postID}/like`,
                 withCredentials: true,
@@ -219,7 +219,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({ likes, postID }) => {
         if (!liked) return;
 
         try {
-            const res = await axios({
+            const res = await api({
                 method: "PATCH",
                 url: BASE_URL_API + `/post/${postID}/unlike`,
                 withCredentials: true,

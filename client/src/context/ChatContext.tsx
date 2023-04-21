@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../utils/api";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Socket } from "socket.io-client";
 import useSocket from "../hooks/useSocket";
@@ -33,7 +33,7 @@ const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
         // get chat from api
         (async () => {
             try {
-                const res = await axios({
+                const res = await api({
                     method: "GET",
                     url: BASE_URL_API + `/chats`,
                     withCredentials: true,
@@ -46,7 +46,7 @@ const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
                             (m) => m !== auth?.currentUser?.id
                         )[0];
                         try {
-                            const res = await axios({
+                            const res = await api({
                                 method: "GET",
                                 url: BASE_URL_API + `/user/${friendID}`,
                                 withCredentials: true,

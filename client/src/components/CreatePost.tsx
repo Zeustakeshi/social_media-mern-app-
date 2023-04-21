@@ -6,6 +6,7 @@ import PhotoSizeSelectActualOutlinedIcon from "@mui/icons-material/PhotoSizeSele
 import SentimentSatisfiedOutlinedIcon from "@mui/icons-material/SentimentSatisfiedOutlined";
 import axios from "axios";
 import { BASE_URL_API } from "../utils/contst";
+import api from "../utils/api";
 const CreatePost = () => {
     const [postDesc, setPostDesc] = useState<string>("");
     const [postImage, setPostImage] = useState<string | undefined>();
@@ -25,7 +26,7 @@ const CreatePost = () => {
 
         setLoading(true);
         try {
-            await axios({
+            await api({
                 method: "POST",
                 url: BASE_URL_API + `/post`,
                 data: {
