@@ -7,6 +7,7 @@ import ChatTopBar from "../components/chat/ChatTopBar";
 import { useAuth } from "../context/authContext";
 import { useChat } from "../context/ChatContext";
 import { IMessage } from "../interfaces/chats.interface";
+import api from "../utils/api";
 import { BASE_URL_API } from "../utils/contst";
 
 const Chat = () => {
@@ -21,7 +22,7 @@ const Chat = () => {
         if (!state) return;
         (async () => {
             try {
-                const res = await axios({
+                const res = await api({
                     method: "GET",
                     url: BASE_URL_API + `/messages/${chatID}`,
                     withCredentials: true,

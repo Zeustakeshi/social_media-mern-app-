@@ -18,9 +18,9 @@ export const authenticationMiddleware = (req, res, next) => {
 };
 
 export const socketAuthMiddleware = (socket, next) => {
-    let token = socket.handshake?.headers?.cookie?.split(" ")[0]?.split("=")[1];
-    token = token?.slice(0, token.length - 1);
-
+    const authToken = socket.handshake?.auth?.authorization;
+    console.log(authToken);
+    const token = authToken?.split(" ")[1];
     if (!token) return next(new Error("Unauthorized !"));
 
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err) => {

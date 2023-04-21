@@ -8,9 +8,9 @@ export const getCookie = (name: string) => {
     if (parts.length === 2) return parts?.pop()?.split(";").shift();
 };
 
-export const BASE_URL_API = "https://fakebook-4mvb.onrender.com/api";
-export const BASE_URL = "https://fakebook-4mvb.onrender.com";
+// export const BASE_URL_API = "https://fakebook-4mvb.onrender.com/api";
+// export const BASE_URL = "https://fakebook-4mvb.onrender.com";
 
 // DEV;
-// export const BASE_URL_API = "http://localhost:3000/api";
-// export const BASE_URL = "http://localhost:3000";
+export const BASE_URL_API = "http://localhost:3000/api";
+export const BASE_URL = "http://localhost:3000";
